@@ -12,15 +12,17 @@ simple Channel
         //Transmission bitrate
         int bitRate;
         //Noise power
-        int noisePowerDBm;
+        double noisePowerDBm;
         //Probability channel remain in good state after being in good state
         double transProbGoodGood;
         //Probability channel remains in bad state after being in bad state
-        double tansProbBadBad;
+        double transProbBadBad;
         //channel gain in the good state
         int channelGainGoodDB;
         //channel gain in the bad state
         int channelGainBadDB;
+        //Current state of the channel
+        bool goodState;
         
         gates:
             //Gate connected to Transmitter

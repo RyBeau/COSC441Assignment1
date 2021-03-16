@@ -1,25 +1,24 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
-
 #include "Channel.h"
 
 Define_Module(Channel);
 
 void Channel::initialize()
 {
-    // TODO - Generated method body
+    pathLossExponent = par("pathLossExponent");
+    txPowerDBm = par("txPowerDBm");
+    noisePowerDBm = par("noisePowerDBm");
+    bitRate = par("bitRate");
+    outGateId = findGate("transmitGate");
+    inGateId = findGate("receiveGate");
+    requestGateId = findGate("requestGate");
+
+    EV << "Channel initialized with: \npathLossExponent: " << pathLossExponent
+            << "\ntxPowerDBm: " << txPowerDBm
+            << "\nnoisePowerDBm: " << noisePowerDBm
+            << "\nbitRate: " << bitRate
+            << "\noutGateId: " << outGateId
+            << "\ninGateId: " << inGateId
+            << "\nrequestGateId: " << requestGateId <<"\n";
 }
 
 void Channel::handleMessage(cMessage *msg)

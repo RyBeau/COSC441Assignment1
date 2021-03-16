@@ -5,10 +5,15 @@ Define_Module(Transmitter);
 
 void Transmitter::initialize()
 {
-    numberOverheadBits = 100;
+    numberOverheadBits = par("numberOverheadBits");
     numberUserBits = 1000;
     outGateId = findGate("transmitGate");
     inGateId = findGate("receiveGate");
+
+    EV << "Transmitter initialized with:\n numberOverheadBits: " << numberOverheadBits
+            << "\nnumberUserBits: " << numberUserBits <<
+            "\noutGateId:" << outGateId <<
+            "\ninGateId: " << inGateId << "\n";
 }
 
 void Transmitter::handleMessage(cMessage *msg)
