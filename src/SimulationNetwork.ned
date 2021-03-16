@@ -1,6 +1,6 @@
 package cosc441assignment1;
 
-module Network
+network SimulationNetwork
 {
     submodules:
         transmitter: Transmitter;
