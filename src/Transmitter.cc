@@ -6,7 +6,7 @@ Define_Module(Transmitter);
 void Transmitter::initialize()
 {
     numberOverheadBits = par("numberOverheadBits");
-    numberUserBits = 1000;
+    numberUserBits = par("numberUserBits");
     outGateId = findGate("transmitGate");
     inGateId = findGate("receiveGate");
 
