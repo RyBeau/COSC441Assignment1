@@ -10,7 +10,6 @@ class Transmitter : public cSimpleModule
   public:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
-    ~Transmitter();
 
   private:
     int64_t numberOverheadBits;

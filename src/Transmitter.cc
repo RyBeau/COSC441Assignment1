@@ -13,7 +13,7 @@ void Transmitter::initialize()
 
 void Transmitter::handleMessage(cMessage *msg)
 {
-    if (msg->arrivedOn(inGateid)) {
+    if (msg->arrivedOn(inGateId)) {
 
         PacketRecord *packetRecord = new PacketRecord;
 
@@ -32,9 +32,4 @@ void Transmitter::handleMessage(cMessage *msg)
     } else {
         error("Transmitter:: Received Unexpected Message");
     }
-}
-
-void Transmitter::~Transmitter()
-{
-    // TODO
 }
