@@ -23,6 +23,10 @@ simple Channel
         int channelGainBadDB;
         
         gates:
+            //Gate connected to Transmitter
             input receiveGate;
+            //Gate connected to Receiver
             output transmitGate;
+            //Gate connect to the Transmitter
+            output requestGate;
 }

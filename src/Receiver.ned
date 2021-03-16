@@ -4,5 +4,5 @@ simple Receiver
 {
     gates:
         //Gate connected to channel
-        input inputGate;
+        input receiveGate;
 }

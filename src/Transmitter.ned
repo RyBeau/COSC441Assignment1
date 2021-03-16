@@ -10,5 +10,6 @@ simple Transmitter
     gates:
         //Gate connected to channel
         output transmitGate;
+        //Gate connected to the channel
         input receiveGate;
 }
