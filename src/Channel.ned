@@ -1,23 +1,28 @@
-//
-// This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU Lesser General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU Lesser General Public License for more details.
-// 
-// You should have received a copy of the GNU Lesser General Public License
-// along with this program.  If not, see http://www.gnu.org/licenses/.
-// 
-
 package cosc441assignment1;
 
-//
-// TODO auto-generated module
-//
 simple Channel
 {
+    parameters:
+        //Distance between transmitter and receiver nodes
+        int nodeDistance;
+        //Path loss exponent for log-distance channel model
+        int pathLossExponent;
+        //Raidated Power in dBm
+        int txPowerDBm;
+        //Transmission bitrate
+        int bitRate;
+        //Noise power
+        int noisePowerDBm;
+        //Probability channel remain in good state after being in good state
+        double transProbGoodGood;
+        //Probability channel remains in bad state after being in bad state
+        double tansProbBadBad;
+        //channel gain in the good state
+        int channelGainGoodDB;
+        //channel gain in the bad state
+        int channelGainBadDB;
+        
+        gates:
+            input receiveGate;
+            output transmitGate;
 }
