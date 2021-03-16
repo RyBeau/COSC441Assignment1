@@ -21,8 +21,6 @@ simple Channel
         int channelGainGoodDB;
         //channel gain in the bad state
         int channelGainBadDB;
-        //Current state of the channel
-        bool goodState;
         
         gates:
             //Gate connected to Transmitter

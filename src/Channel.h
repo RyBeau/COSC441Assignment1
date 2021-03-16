@@ -14,7 +14,7 @@ class Channel : public cSimpleModule
     int nodeDistance, pathLossExponent, bitRate, txPowerDBm,
     channelGainGoodDB, channelGainBadDB, outGateId, inGateId, requestGateId;
     double noisePowerDBm, transProbGoodGood, transProbBadBad;
-    bool goodState;
+    bool goodState = true;
 };
 
 #endif
