@@ -10,10 +10,12 @@ void Transmitter::initialize()
     outGateId = findGate("transmitGate");
     inGateId = findGate("receiveGate");
 
-    EV << "Transmitter initialized with:\n numberOverheadBits: " << numberOverheadBits
-            << "\nnumberUserBits: " << numberUserBits <<
-            "\noutGateId:" << outGateId <<
-            "\ninGateId: " << inGateId << "\n";
+    EV << "Transmitter initialized with: "
+            << "\n numberOverheadBits: " << numberOverheadBits
+            << "\nnumberUserBits: " << numberUserBits
+            << "\noutGateId:" << outGateId
+            << "\ninGateId: " << inGateId
+            << "\n";
 }
 
 void Transmitter::handleMessage(cMessage *msg)
@@ -30,11 +32,13 @@ void Transmitter::handleMessage(cMessage *msg)
         packetRecord->setOvhdBits(numberOverheadBits);
         packetRecord->setUserBits(numberUserBits);
         packetRecord->setErrorFlag(false);
+        packetRecord->setBitLength(numberUserBits + numberOverheadBits);
 
         send(packetRecord, outGateId);
         delete msg;
 
     } else {
+        delete msg;
         error("Transmitter:: Received Unexpected Message");
     }
 }

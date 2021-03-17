@@ -19,7 +19,9 @@ Define_Module(Receiver);
 
 void Receiver::initialize()
 {
-    // TODO - Generated method body
+    inGateId = findGate("receiveGate");
+    EV << "Receiver initialized with: "
+       << "inGateId: " << inGateId;
 }
 
 void Receiver::handleMessage(cMessage *msg)
