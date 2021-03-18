@@ -22,22 +22,23 @@ void Receiver::initialize()
 {
     inGateId = findGate("receiveGate");
     EV << "Receiver initialized with: "
-       << "inGateId: " << inGateId;
+       << "inGateId: " << inGateId
+       << endl;
 }
 
 void Receiver::handleMessage(cMessage *msg)
 {
-    if(dynamic_cast<PacketRecord>(*msg)){
-        PacketRecord packetRecord = (PacketRecord*) msg;
+    if(dynamic_cast<PacketRecord*>(msg)){
+        PacketRecord* packetRecord = (PacketRecord*) msg;
         EV << "Receiver has received a valid message: "
                 << "\nSequence Number: " << packetRecord->getSequenceNumber()
                 << "\nOverhead Bits: " << packetRecord->getOvhdBits()
                 << "\nUser Bits: " << packetRecord->getUserBits()
-                << "\nError Flag: " << packetRecord->getErrorFlag();
-
-        delete packetRecord;
+                << "\nError Flag: " << packetRecord->getErrorFlag()
+                << endl;
         delete msg;
     } else {
+        delete msg;
         error("Receiver:: Received unexpected packet");
     }
 }
