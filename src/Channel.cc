@@ -1,4 +1,5 @@
 #include "Channel.h"
+#include "PacketRecord_m.h"
 
 Define_Module(Channel);
 
@@ -15,6 +16,7 @@ void Channel::initialize()
     transProbBadBad = par("transProbBadBad");
     channelGainGoodDB = par("channelGainGoodDB");
     channelGainBadDB = par("channelGainBadDB");
+    startSim = new cMessage ("Start");
 
     EV << "Channel initialized with: "
             << "\npathLossExponent: " << pathLossExponent
@@ -28,10 +30,36 @@ void Channel::initialize()
             << "\ntransProbBadBad: " << transProbBadBad
             << "\nchannelGainGoodDB: " << channelGainGoodDB
             << "\nchannelGainBadDB: " << channelGainBadDB
-            <<"\n";
+            << endl;
+
+    scheduleAt(simTime(), startSim);
 }
 
 void Channel::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    if(msg == startSim){
+        EV << "Channel Received Start Message";
+        cMessage *pkt = new cMessage("Start transmission");
+        send(pkt, requestGateId);
+
+    } else if (dynamic_cast<PacketRecord*>(msg)){
+        PacketRecord* packetRecord = (PacketRecord*) msg;
+        EV << "Channel has received a valid message: "
+                << "\nSequence Number: " << packetRecord->getSequenceNumber()
+                << "\nOverhead Bits: " << packetRecord->getOvhdBits()
+                << "\nUser Bits: " << packetRecord->getUserBits()
+                << "\nError Flag: " << packetRecord->getErrorFlag();
+
+        if((double) rand() > 0.5){
+            packetRecord->setErrorFlag(true);
+        }
+
+        send(packetRecord, outGateId);
+    } else {
+        error("Channel: Received unexpected packet");
+    }
+}
+
+Channel::~Channel(){
+    cancelAndDelete(startSim);
 }

@@ -10,11 +10,13 @@ class Channel : public cSimpleModule
   public:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    ~Channel();
   protected:
     int nodeDistance, pathLossExponent, bitRate, txPowerDBm,
     channelGainGoodDB, channelGainBadDB, outGateId, inGateId, requestGateId;
     double noisePowerDBm, transProbGoodGood, transProbBadBad;
     bool goodState = true;
+    cMessage* startSim;
 };
 
 #endif
