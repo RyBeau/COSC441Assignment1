@@ -14,6 +14,7 @@
 // 
 
 #include "Receiver.h"
+#include "PacketRecord_m.h"
 
 Define_Module(Receiver);
 
@@ -26,5 +27,17 @@ void Receiver::initialize()
 
 void Receiver::handleMessage(cMessage *msg)
 {
-    // TODO - Generated method body
+    if(dynamic_cast<PacketRecord>(*msg)){
+        PacketRecord packetRecord = (PacketRecord*) msg;
+        EV << "Receiver has received a valid message: "
+                << "\nSequence Number: " << packetRecord->getSequenceNumber()
+                << "\nOverhead Bits: " << packetRecord->getOvhdBits()
+                << "\nUser Bits: " << packetRecord->getUserBits()
+                << "\nError Flag: " << packetRecord->getErrorFlag();
+
+        delete packetRecord;
+        delete msg;
+    } else {
+        error("Receiver:: Received unexpected packet");
+    }
 }
