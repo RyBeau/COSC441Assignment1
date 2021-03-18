@@ -15,7 +15,7 @@ void Transmitter::initialize()
             << "\nnumberUserBits: " << numberUserBits
             << "\noutGateId:" << outGateId
             << "\ninGateId: " << inGateId
-            << "\n";
+            << endl;
 }
 
 void Transmitter::handleMessage(cMessage *msg)
@@ -26,7 +26,9 @@ void Transmitter::handleMessage(cMessage *msg)
 
         EV << "Transmitter::handleMessage: generating a new packet record at time "
                 << simTime() << " with sequence number "
-                << sequenceNumber << " and with packet size";
+                << sequenceNumber << " and with packet size"
+                << numberOverheadBits + numberUserBits
+                << endl;
 
         packetRecord->setSequenceNumber(sequenceNumber++);
         packetRecord->setOvhdBits(numberOverheadBits);
