@@ -18,6 +18,8 @@
 
 Define_Module(Receiver);
 
+simsignal_t packetErrorSignalId  =  cComponent::registerSignal("packetError");
+
 void Receiver::initialize()
 {
     inGateId = findGate("receiveGate");
@@ -36,6 +38,7 @@ void Receiver::handleMessage(cMessage *msg)
                 << "\nUser Bits: " << packetRecord->getUserBits()
                 << "\nError Flag: " << packetRecord->getErrorFlag()
                 << endl;
+        emit(packetErrorSignalId, packetRecord->getErrorFlag());
         delete msg;
     } else {
         delete msg;
