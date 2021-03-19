@@ -2,3 +2,4 @@
 *.exe
 src/PacketRecord_m.cc
 src/PacketRecord_m.h
+simulations/results
