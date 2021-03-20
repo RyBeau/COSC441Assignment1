@@ -8,9 +8,9 @@ using namespace omnetpp;
 class Transmitter : public cSimpleModule
 {
   public:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-    virtual void generateAndSend();
+    void initialize();
+    void handleMessage(cMessage *msg);
+    void generateAndSend();
     ~Transmitter();
 
   private:

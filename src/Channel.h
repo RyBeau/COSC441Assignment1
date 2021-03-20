@@ -10,10 +10,10 @@ using namespace omnetpp;
 class Channel : public cSimpleModule
 {
   public:
-    virtual void initialize();
-    virtual void handleMessage(cMessage *msg);
-    virtual void transmitMessage(PacketRecord *packetRecord);
-    virtual void completeTransmission();
+    void initialize();
+    void handleMessage(cMessage *msg);
+    void transmitMessage(PacketRecord *packetRecord);
+    void completeTransmission();
     ~Channel();
   protected:
     int nodeDistance, pathLossExponent, bitRate, txPowerDBm,
