@@ -49,6 +49,7 @@ void Channel::handleMessage(cMessage *msg)
                 << "\nError Flag: " << packetRecord->getErrorFlag();
         transmitMessage(packetRecord);
     } else {
+        delete msg;
         error("Channel: Received unexpected packet");
     }
 }
@@ -58,6 +59,7 @@ void Channel::transmitMessage(PacketRecord *packetRecord)
     if (currentPacket)
     {
         EV << "Channel:: Dropping incoming packet as there is already on in transmission.";
+        delete packetRecord;
     } else {
         currentPacket = packetRecord;
 
@@ -71,8 +73,10 @@ void Channel::transmitMessage(PacketRecord *packetRecord)
     }
 }
 
-void Channel::completeTransmission(){
-    if (currentPacket){
+void Channel::completeTransmission()
+{
+    if (currentPacket)
+    {
         send(currentPacket, outGateId);
         currentPacket = nullptr;
         cMessage *pkt = new cMessage("Transmit");
@@ -84,7 +88,8 @@ void Channel::completeTransmission(){
 
 }
 
-Channel::~Channel(){
+Channel::~Channel()
+{
     cancelAndDelete(transmitted);
     if (currentPacket){
         delete currentPacket;

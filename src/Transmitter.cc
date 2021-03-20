@@ -23,33 +23,38 @@ void Transmitter::initialize()
 
 void Transmitter::handleMessage(cMessage *msg)
 {
-    if (msg->arrivedOn(inGateId) || msg == startSim) {
-
-        PacketRecord *packetRecord = new PacketRecord;
-
-        EV << "Transmitter::handleMessage: generating a new packet record at time "
-                << simTime() << " with sequence number "
-                << sequenceNumber << " and with packet size"
-                << numberOverheadBits + numberUserBits
-                << endl;
-
-        packetRecord->setSequenceNumber(sequenceNumber++);
-        packetRecord->setOvhdBits(numberOverheadBits);
-        packetRecord->setUserBits(numberUserBits);
-        packetRecord->setErrorFlag(false);
-        packetRecord->setBitLength(numberUserBits + numberOverheadBits);
-
-        send(packetRecord, outGateId);
+    if (msg->arrivedOn(inGateId)) {
+        EV << "Transmitter::Received Request Message" << endl;
+        generateAndSend();
         delete msg;
-
+    } else if (msg == startSim) {
+        EV << "Transmitter::Received Start Simulation Message" << endl;
+        generateAndSend();
     } else {
         delete msg;
         error("Transmitter:: Received Unexpected Message");
     }
 }
 
+ void Transmitter::generateAndSend()
+ {
+     PacketRecord *packetRecord = new PacketRecord;
+
+     EV << "Transmitter::handleMessage: generating a new packet record at time "
+             << simTime() << " with sequence number "
+             << sequenceNumber << " and with packet size"
+             << numberOverheadBits + numberUserBits
+             << endl;
+
+     packetRecord->setSequenceNumber(sequenceNumber++);
+     packetRecord->setOvhdBits(numberOverheadBits);
+     packetRecord->setUserBits(numberUserBits);
+     packetRecord->setErrorFlag(false);
+     packetRecord->setBitLength(numberUserBits + numberOverheadBits);
+
+     send(packetRecord, outGateId);
+ }
+
 Transmitter::~Transmitter(){
-    if (startSim){
-        cancelAndDelete(startSim);
-    }
+    cancelAndDelete(startSim);
 }

@@ -10,6 +10,7 @@ class Transmitter : public cSimpleModule
   public:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void generateAndSend();
     ~Transmitter();
 
   private:
