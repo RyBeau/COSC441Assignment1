@@ -1,5 +1,6 @@
 #include "Channel.h"
 #include "PacketRecord_m.h"
+#include <stdlib.h>
 
 Define_Module(Channel);
 
@@ -16,7 +17,8 @@ void Channel::initialize()
     transProbBadBad = par("transProbBadBad");
     channelGainGoodDB = par("channelGainGoodDB");
     channelGainBadDB = par("channelGainBadDB");
-    startSim = new cMessage ("Start");
+    transmitted = new cMessage ("Transmitted");
+    currentPacket = nullptr;
 
     EV << "Channel initialized with: "
             << "\npathLossExponent: " << pathLossExponent
@@ -31,17 +33,13 @@ void Channel::initialize()
             << "\nchannelGainGoodDB: " << channelGainGoodDB
             << "\nchannelGainBadDB: " << channelGainBadDB
             << endl;
-
-    scheduleAt(simTime(), startSim);
 }
 
 void Channel::handleMessage(cMessage *msg)
 {
-    if(msg == startSim){
-        EV << "Channel Received Start Message";
-        cMessage *pkt = new cMessage("Start transmission");
-        send(pkt, requestGateId);
-
+    if(msg == transmitted){
+        EV << "Channel Received Transmitted Message";
+        completeTransmission();
     } else if (dynamic_cast<PacketRecord*>(msg)){
         PacketRecord* packetRecord = (PacketRecord*) msg;
         EV << "Channel has received a valid message: "
@@ -49,17 +47,46 @@ void Channel::handleMessage(cMessage *msg)
                 << "\nOverhead Bits: " << packetRecord->getOvhdBits()
                 << "\nUser Bits: " << packetRecord->getUserBits()
                 << "\nError Flag: " << packetRecord->getErrorFlag();
-
-        if((double) rand() > 0.5){
-            packetRecord->setErrorFlag(true);
-        }
-
-        send(packetRecord, outGateId);
+        transmitMessage(packetRecord);
     } else {
         error("Channel: Received unexpected packet");
     }
 }
 
+void Channel::transmitMessage(PacketRecord *packetRecord)
+{
+    if (currentPacket)
+    {
+        EV << "Channel:: Dropping incoming packet as there is already on in transmission.";
+    } else {
+        currentPacket = packetRecord;
+
+        if((rand() % 100) < 50)
+        {
+            currentPacket->setErrorFlag(true);
+            EV << "Channel:: Bit error occurred. Set errorFlag to true";
+        }
+        double packetLength = (double)currentPacket->getBitLength();
+        scheduleAt(simTime() + (packetLength / bitRate), transmitted);
+    }
+}
+
+void Channel::completeTransmission(){
+    if (currentPacket){
+        send(currentPacket, outGateId);
+        currentPacket = nullptr;
+        cMessage *pkt = new cMessage("Transmit");
+        send(pkt, requestGateId);
+        EV << "Channel:: Message sent through the channel";
+    } else {
+        EV << "Channel:: No packet to transmit";
+    }
+
+}
+
 Channel::~Channel(){
-    cancelAndDelete(startSim);
+    cancelAndDelete(transmitted);
+    if (currentPacket){
+        delete currentPacket;
+    }
 }

@@ -10,6 +10,7 @@ class Transmitter : public cSimpleModule
   public:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    ~Transmitter();
 
   private:
     int64_t numberOverheadBits;
@@ -17,6 +18,7 @@ class Transmitter : public cSimpleModule
     int outGateId;
     int inGateId;
     int sequenceNumber = 0;
+    cMessage* startSim;
 };
 
 #endif
