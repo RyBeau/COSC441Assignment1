@@ -9,6 +9,7 @@ void Transmitter::initialize()
     numberUserBits = par("numberUserBits");
     outGateId = findGate("transmitGate");
     inGateId = findGate("receiveGate");
+    startSim = new cMessage("Start");
 
     EV << "Transmitter initialized with: "
             << "\n numberOverheadBits: " << numberOverheadBits
@@ -16,11 +17,13 @@ void Transmitter::initialize()
             << "\noutGateId:" << outGateId
             << "\ninGateId: " << inGateId
             << endl;
+
+    scheduleAt(simTime(), startSim);
 }
 
 void Transmitter::handleMessage(cMessage *msg)
 {
-    if (msg->arrivedOn(inGateId)) {
+    if (msg->arrivedOn(inGateId) || msg == startSim) {
 
         PacketRecord *packetRecord = new PacketRecord;
 
@@ -42,5 +45,11 @@ void Transmitter::handleMessage(cMessage *msg)
     } else {
         delete msg;
         error("Transmitter:: Received Unexpected Message");
+    }
+}
+
+Transmitter::~Transmitter(){
+    if (startSim){
+        cancelAndDelete(startSim);
     }
 }
