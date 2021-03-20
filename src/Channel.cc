@@ -1,6 +1,5 @@
 #include "Channel.h"
 #include "PacketRecord_m.h"
-#include <stdlib.h>
 
 Define_Module(Channel);
 
@@ -63,7 +62,7 @@ void Channel::transmitMessage(PacketRecord *packetRecord)
     } else {
         currentPacket = packetRecord;
 
-        if((rand() % 100) < 50)
+        if(uniform(0, 1) > 0.5)
         {
             currentPacket->setErrorFlag(true);
             EV << "Channel:: Bit error occurred. Set errorFlag to true";
