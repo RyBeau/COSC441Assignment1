@@ -4,7 +4,7 @@ simple Receiver
 {
     parameters:
         @signal[packetError](type=bool);
-        @statistic[packetError](title="Packet Errors"; record=vector, stats; interpolationmode=none);
+        @statistic[packetError](record=stats);
     gates:
         //Gate connected to channel
         input receiveGate;
