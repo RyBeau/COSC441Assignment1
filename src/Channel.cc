@@ -81,6 +81,7 @@ void Channel::processPacket(PacketRecord *packetRecord)
         double eHat = receivedPower - (noisePowerDBm + convertToDb(bitRate));
         double bitErrorRate = erfc(sqrt(convertToNormal(eHat))) / 2.0;
         double randomNumber = uniform(0, 1);
+        EV << randomNumber << " " << bitErrorRate << endl;
         if (randomNumber < bitErrorRate){
             currentPacket->setErrorFlag(true);
             EV << "Channel:: Bit error occurred. Set errorFlag to true" << endl;

@@ -29,6 +29,7 @@ class Receiver : public cSimpleModule
     void initialize();
     void handleMessage(cMessage *msg);
     int inGateId;
+    void finish();
 };
 
 #endif
