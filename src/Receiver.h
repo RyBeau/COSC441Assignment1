@@ -28,7 +28,7 @@ class Receiver : public cSimpleModule
   protected:
     void initialize();
     void handleMessage(cMessage *msg);
-    int inGateId;
+    int inGateId, count, totalErrors, userBits, ovhdBits;
     void finish();
 };
 
