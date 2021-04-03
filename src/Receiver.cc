@@ -23,8 +23,15 @@ simsignal_t packetErrorSignalId  =  cComponent::registerSignal("packetError");
 void Receiver::initialize()
 {
     inGateId = findGate("receiveGate");
+    count = 0;
+    totalErrors = 0;
+    userBits = 0;
+    ovhdBits =  0;
     EV << "Receiver initialized with: "
-       << "inGateId: " << inGateId
+       << "inGateId: " << inGateId << "\n"
+       << "count: " << count << "\n"
+       << "userBits: " << userBits << "\n"
+       << "ovhdBits: " << ovhdBits << "\n"
        << endl;
 }
 
@@ -39,9 +46,32 @@ void Receiver::handleMessage(cMessage *msg)
                 << "\nError Flag: " << packetRecord->getErrorFlag()
                 << endl;
         emit(packetErrorSignalId, packetRecord->getErrorFlag());
+        count++;
+        bool packetValue = packetRecord->getErrorFlag();
+        if(packetValue){
+            totalErrors++;
+        }
+        if(userBits == 0 || ovhdBits == 0){
+            userBits = packetRecord->getUserBits();
+            ovhdBits = packetRecord->getOvhdBits();
+        }
         delete msg;
     } else {
         delete msg;
         error("Receiver:: Received unexpected packet");
     }
+}
+
+void Receiver::finish()
+{
+    EV << "Receiver finished with: "
+       << "inGateId: " << inGateId << "\n"
+       << "count: " << count << "\n"
+       << "userBits: " << userBits << "\n"
+       << "ovhdBits: " << ovhdBits << "\n"
+       << "totalErrors: " << totalErrors << "\n"
+       << endl;
+    double packetLossRate = (double)totalErrors / (double)count;
+    recordScalar("AveragePacketLoss", (double)totalErrors / (double)count);
+    recordScalar("Goodput", ((1 - packetLossRate) * userBits) / (userBits + ovhdBits));
 }
