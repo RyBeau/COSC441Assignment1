@@ -3,6 +3,10 @@
 
 Define_Module(Transmitter);
 
+/**
+ * Initialize all properties from omnetpp.ini.
+ * Schedules start message to begin simulation.
+ */
 void Transmitter::initialize()
 {
     numberOverheadBits = par("numberOverheadBits");
@@ -21,6 +25,11 @@ void Transmitter::initialize()
     scheduleAt(simTime(), startSim);
 }
 
+/**
+ * Callback for received messages, checks message type and handles
+ * appropriately. Any expected message received creates PacketRecord to
+ * be sent to the Channel.
+ */
 void Transmitter::handleMessage(cMessage *msg)
 {
     if (msg->arrivedOn(inGateId)) {
@@ -36,6 +45,10 @@ void Transmitter::handleMessage(cMessage *msg)
     }
 }
 
+/**
+ * Generates the packet record based on the property values and
+ * sends it to the Channel.
+ */
  void Transmitter::generateAndSend()
  {
      PacketRecord *packetRecord = new PacketRecord;
@@ -55,6 +68,9 @@ void Transmitter::handleMessage(cMessage *msg)
      send(packetRecord, outGateId);
  }
 
+ /**
+  * Cancel and delete startSim
+  */
 Transmitter::~Transmitter(){
     cancelAndDelete(startSim);
 }

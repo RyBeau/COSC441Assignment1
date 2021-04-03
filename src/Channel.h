@@ -27,6 +27,9 @@ class Channel : public cSimpleModule
     int nodeDistance, pathLossExponent, bitRate, txPowerDBm,
     channelGainGoodDB, channelGainBadDB, outGateId, inGateId, requestGateId;
     double noisePowerDBm, transProbGoodGood, transProbBadBad;
+    /**
+     * true = Good State, false = Bad State
+     */
     bool currentState, nextState = true;
     cMessage* requestTransmission;
     cMessage* transmitted;

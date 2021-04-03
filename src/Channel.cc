@@ -4,6 +4,9 @@
 
 Define_Module(Channel);
 
+/**
+ * Initialize all properties from omnetpp.ini.
+ */
 void Channel::initialize()
 {
     pathLossExponent = par("pathLossExponent");
@@ -37,6 +40,10 @@ void Channel::initialize()
             << endl;
 }
 
+/**
+ * Callback for received messages, checks message type and sends pointer
+ * to the correct handling method.
+ */
 void Channel::handleMessage(cMessage *msg)
 {
     if(msg == transmitted){
@@ -57,6 +64,10 @@ void Channel::handleMessage(cMessage *msg)
     }
 }
 
+/**
+ * Schedules messages received on the receiveGate to be sent on the transmitGate
+ * at the correct future time in the sim considering bit rate and packet length.
+ */
 void Channel::transmitMessage(PacketRecord *packetRecord)
 {
     if (currentPacket)
@@ -71,6 +82,10 @@ void Channel::transmitMessage(PacketRecord *packetRecord)
     }
 }
 
+/**
+ * Handles the calculation of bit errors for a received packet in a
+ * bit by bit fashion.
+ */
 void Channel::processPacket(PacketRecord *packetRecord)
 {
     double pathLossDb = convertToDb(calculatePathLoss());
@@ -89,6 +104,9 @@ void Channel::processPacket(PacketRecord *packetRecord)
     }
 }
 
+/**
+ * Returns the path loss for the defined nodeDistance.
+ */
 double Channel::calculatePathLoss()
 {
     if(nodeDistance <= 1){
@@ -98,8 +116,10 @@ double Channel::calculatePathLoss()
     }
 }
 
-
-
+/**
+ * Updates the current channel state currentState and sets the nextState for the
+ * following bit.
+ */
 void Channel::setNextChannelState()
 {
     currentState = nextState;
@@ -114,15 +134,24 @@ void Channel::setNextChannelState()
     }
 }
 
+/**
+ * Converts dB domain to normal domain
+ */
 double Channel::convertToNormal(double db){
     return std::pow(10.0, (db / 10.0));
 }
 
+/**
+ * Converts normal domain to dB domain
+ */
 double Channel::convertToDb(double n){
     return 10.0 * log10(n);
 }
 
-
+/**
+ * Sends a packet now ready for transmission to the receiver through
+ * the transmitGate.
+ */
 void Channel::completeTransmission()
 {
     if (currentPacket)
@@ -138,6 +167,9 @@ void Channel::completeTransmission()
 
 }
 
+/**
+ * Cancels and delete all potentially defines messages.
+ */
 Channel::~Channel()
 {
     cancelAndDelete(transmitted);

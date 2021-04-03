@@ -20,6 +20,9 @@ Define_Module(Receiver);
 
 simsignal_t packetErrorSignalId  =  cComponent::registerSignal("packetError");
 
+/**
+ * Initialize all properties from omnetpp.ini.
+ */
 void Receiver::initialize()
 {
     inGateId = findGate("receiveGate");
@@ -35,6 +38,10 @@ void Receiver::initialize()
        << endl;
 }
 
+/**
+ * Callback for received messages, checks message type and handles
+ * appropriately. Records errorFlag value to the statistic signal.
+ */
 void Receiver::handleMessage(cMessage *msg)
 {
     if(dynamic_cast<PacketRecord*>(msg)){
@@ -62,6 +69,10 @@ void Receiver::handleMessage(cMessage *msg)
     }
 }
 
+/**
+ * Calculates the packet loss rate, goodput and records
+ * the values in the output results file.
+ */
 void Receiver::finish()
 {
     EV << "Receiver finished with: "
